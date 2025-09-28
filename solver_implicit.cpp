@@ -31,10 +31,6 @@ int main() {
     // create a vector to store the old & new current solution
     Eigen::VectorXd u_old = Eigen::VectorXd::Zero(Nx);
     Eigen::VectorXd u_new = Eigen::VectorXd::Zero(Nx);
-    // create a vector to store the advection term
-    Eigen::VectorXd uu_dx = Eigen::VectorXd::Zero(Nx);
-    // create a vector to store the diffusion term
-    Eigen::VectorXd u_dxx = Eigen::VectorXd::Zero(Nx);
     // create a matrix to store the sampled solution
     Eigen::MatrixXd u_sample = Eigen::MatrixXd::Zero(Nx, Ns);
 
@@ -71,7 +67,7 @@ int main() {
         }
 
         u_new = u_old; // initial guess for the iterative solver
-        residual.setOnes();
+        residual.setOnes(); // initialize the residual to enforce at least 1 inner iteration for solving the nonlinear equation per timestep
         counter = 0;
         
         while (counter <= implicit_solver_max_iter && residual.cwiseAbs().maxCoeff() > implicit_solver_threshold) {
